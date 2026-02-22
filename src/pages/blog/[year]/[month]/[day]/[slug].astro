@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { parsePostId } from '../../../../../utils/blog';
+import { parsePostId, withBase } from '../../../../../utils/blog';
+
+const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -32,11 +34,11 @@ const { Content } = await render(post);
         })}
       </time>
       <div class="post-meta">
-        <a href={`/blog/category/${encodeURIComponent(post.data.category)}/`} class="category">
+        <a href={withBase(`/blog/category/${encodeURIComponent(post.data.category)}/`, base)} class="category">
           {post.data.category}
         </a>
         {post.data.tags.map((tag) => (
-          <a href={`/blog/tag/${encodeURIComponent(tag)}/`} class="tag">{tag}</a>
+          <a href={withBase(`/blog/tag/${encodeURIComponent(tag)}/`, base)} class="tag">{tag}</a>
         ))}
       </div>
     </header>

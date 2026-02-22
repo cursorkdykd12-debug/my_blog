@@ -7,13 +7,14 @@ interface Props {
 }
 
 const { title, description = '마크다운 블로그' } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href={`${base}favicon.png`} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
@@ -24,9 +25,9 @@ const { title, description = '마크다운 블로그' } = Astro.props;
   </head>
   <body>
     <nav>
-      <a href="/">Home</a>
-      <a href="/about/">About</a>
-      <a href="/blog/">Blog</a>
+      <a href={base}>Home</a>
+      <a href={`${base}about/`}>About</a>
+      <a href={`${base}blog/`}>Blog</a>
     </nav>
     <main>
       <slot />

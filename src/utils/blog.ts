@@ -13,10 +13,18 @@ export function parsePostId(id: string): { year: string; month: string; day: str
   };
 }
 
+/** base 경로를 포함한 URL 생성 (GitHub Pages 등 서브경로 배포용) */
+export function withBase(path: string, base: string = ''): string {
+  if (!base || base === '/') return path.startsWith('/') ? path : `/${path}`;
+  const b = base.replace(/\/$/, '');
+  const p = path.startsWith('/') ? path.slice(1) : path;
+  return `${b}/${p}`;
+}
+
 /** 블로그 글 상세 페이지 URL 생성 */
-export function getPostUrl(id: string): string {
+export function getPostUrl(id: string, basePath = ''): string {
   const { year, month, day, slug } = parsePostId(id);
-  return `/blog/${year}/${month}/${day}/${slug}/`;
+  return withBase(`/blog/${year}/${month}/${day}/${slug}/`, basePath);
 }
 
 export function getPostsByMonth(posts: BlogPost[]) {
