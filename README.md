@@ -40,6 +40,7 @@ draft: false
 
 ## GitHub Pages 배포
 
-1. **Settings → Pages**에서 Source를 **GitHub Actions**로 설정
-2. `main` 브랜치에 푸시 시 자동 배포
-3. 배포 완료 후 **https://cursorkdykd12-debug.github.io/my_blog/** 에서 확인
+1. **Settings → Pages**에서 Source를 **Deploy from a branch**로 설정
+2. Branch: **gh-pages**, Folder: **/ (root)** 선택
+3. `main` 브랜치에 푸시 시 자동 배포
+4. 배포 완료 후 **https://cursorkdykd12-debug.github.io/my_blog/** 에서 확인
