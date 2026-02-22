@@ -40,11 +40,6 @@ draft: false
 
 ## GitHub Pages 배포
 
-1. GitHub 레포지토리 생성 후 코드 푸시
-2. **Settings → Pages**에서 Source를 **GitHub Actions**로 설정
-3. `main` 브랜치에 푸시 시 자동 배포
-
-### base 경로 설정
-
-- **사용자 페이지** (`username.github.io`): `astro.config.mjs`에서 `base: '/'`로 변경
-- **프로젝트 페이지** (`username.github.io/make_blog`): `base: '/make_blog/'` (기본값)
+1. **Settings → Pages**에서 Source를 **GitHub Actions**로 설정
+2. `main` 브랜치에 푸시 시 자동 배포
+3. 배포 완료 후 **https://cursorkdykd12-debug.github.io/my_blog/** 에서 확인
