@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getPostsByMonth, formatMonthKey, getAllTags, getAllCategories, getPostUrl } from '../../utils/blog';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const byMonth = getPostsByMonth(posts);
+const tags = getAllTags(posts);
+const categories = getAllCategories(posts);
+---
+
+<BaseLayout title="Blog" description="블로그 글 목록">
+  <div class="blog-layout">
+    <aside class="sidebar">
+      <section class="filter-section">
+        <h3>카테고리</h3>
+        <ul class="filter-list">
+          {categories.map(({ category, count }) => (
+            <li>
+              <a href={`/blog/category/${encodeURIComponent(category)}/`}>
+                {category} <span class="count">({count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section class="filter-section">
+        <h3>태그</h3>
+        <ul class="filter-list tags">
+          {tags.map(({ tag }) => (
+            <li>
+              <a href={`/blog/tag/${encodeURIComponent(tag)}/`} class="tag-link">{tag}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section class="filter-section">
+        <h3>월별 아카이브</h3>
+        <ul class="filter-list">
+          {byMonth.map(([key, monthPosts]) => (
+            <li>
+              <a href={`/blog/archive/${key}/`}>
+                {formatMonthKey(key)} <span class="count">({monthPosts.length})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </aside>
+    <div class="content">
+      <h1>Blog</h1>
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <a href={getPostUrl(post.id)} class="post-title">{post.data.title}</a>
+            <time datetime={post.data.pubDate.toISOString()} class="post-date">
+              {post.data.pubDate.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+            <div class="post-meta">
+              <a href={`/blog/category/${encodeURIComponent(post.data.category)}/`} class="category">
+                {post.data.category}
+              </a>
+              {post.data.tags.map((tag) => (
+                <a href={`/blog/tag/${encodeURIComponent(tag)}/`} class="tag">{tag}</a>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

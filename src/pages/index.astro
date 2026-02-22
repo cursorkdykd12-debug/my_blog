@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getPostUrl } from '../utils/blog';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout title="Home" description="정적 마크다운 블로그">
+  <section class="hero">
+    <h1>환영합니다</h1>
+    <p>마크다운으로 작성하는 블로그입니다. 생각을 기록하고 공유해보세요.</p>
+  </section>
+
+  <section>
+    <h2>최신 글</h2>
+    <ul class="post-list">
+      {
+        posts.map((post) => (
+          <li class="post-item">
+            <a href={getPostUrl(post.id)} class="post-title">
+              {post.data.title}
+            </a>
+            <time datetime={post.data.pubDate.toISOString()} class="post-date">
+              {post.data.pubDate.toLocaleDateString('ko-KR')}
+            </time>
+            {post.data.description && (
+              <p class="post-desc">{post.data.description}</p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <a href="/blog/" class="cta-link">모든 글 보기 →</a>
+  </section>
+</BaseLayout>

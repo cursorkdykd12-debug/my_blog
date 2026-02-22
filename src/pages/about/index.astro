@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const aboutEntry = await getEntry('about', 'index');
+let Content = () => null;
+if (aboutEntry) {
+  const rendered = await render(aboutEntry);
+  Content = rendered.Content;
+}
+---
+
+<BaseLayout title="About" description="소개">
+  <article class="about-content">
+    {aboutEntry ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <p>About 내용이 없습니다.</p>
+    )}
+  </article>
+</BaseLayout>

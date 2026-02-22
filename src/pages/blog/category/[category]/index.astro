@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getPostUrl } from '../../../../utils/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categorySet = new Set<string>();
+  for (const post of posts) {
+    categorySet.add(post.data.category);
+  }
+  return Array.from(categorySet).map((category) => ({
+    params: { category },
+  }));
+}
+
+const { category } = Astro.params;
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft && p.data.category === category)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title={`카테고리: ${category}`} description={`${category} 카테고리의 글 목록`}>
+  <div class="filtered-page">
+    <p class="filter-label">카테고리: <strong>{category}</strong></p>
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li class="post-item">
+          <a href={getPostUrl(post.id)} class="post-title">{post.data.title}</a>
+          <time datetime={post.data.pubDate.toISOString()} class="post-date">
+            {post.data.pubDate.toLocaleDateString('ko-KR')}
+          </time>
+          <a href="/blog/">← 모든 글</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
